@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Meteo viewer</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<link rel="stylesheet" type="text/css" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/meteo.css}"/>
+	
+	<script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
+    <script type="text/javascript" th:src="@{https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js}"></script>
+    <script type="text/javascript" th:src="@{https://unpkg.com/hybind@latest/index.js}"></script>
+	<script type="text/javascript" th:src="@{/js/lib/jeoquery.js}"></script>
+	<script type="text/javascript" th:src="@{/js/custom/utils.js}"></script>
+	<script type="text/javascript" th:src="@{/js/ko/components.js}"></script>
+	<script type="text/javascript" th:src="@{/js/ko/bindings.js}"></script>
+	
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+		jeoquery.defaultData.userName = /*[[${IndexModel.jeoqueryUsername}]]*/ "";
+		api = hybind("/api");    
+		
+		$(document).ready(function () {
+			ko.applyBindings();
+		});
+		
+		
+	/*]]>*/
+	</script>
+</head>
+
+<body>
+
+	<div class="meteoview" data-bind="component: {
+												name : 'meteoview', 
+												params: { 
+													dictSelectService: 'meteo-service',
+												}
+											}">
+	</div>
+
+</body>
+
+</html>

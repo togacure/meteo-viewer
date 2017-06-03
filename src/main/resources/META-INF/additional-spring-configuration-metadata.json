@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "custom.jeoqueryUsername",
+    "type": "java.lang.String",
+    "description": "https://github.com/tompi/jeoquery#how-to-use - jeoquery.defaultData.userName value"
+  },
+  {
+    "name": "custom.meteodata.valid.period",
+    "type": "java.lang.Integer",
+    "description": "Meteodata valid period per mitutes"
+  }
+]}

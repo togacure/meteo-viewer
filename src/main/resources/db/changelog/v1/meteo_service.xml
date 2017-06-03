@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+	logicalFilePath="db/changelog/meteo_service.xml">
+                      
+	<changeSet id="meteo.service.table" author="Alekseev Vitaly">
+		<createTable remarks="Table to store meteo service dictionary"
+	            schemaName="public"
+	            tableName="METEO_SERVICE">
+	        <column name="ID" type="NUMBER" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+	        <column name="LABEL" type="VARCHAR(128)" remarks="Display name">
+	        	<constraints nullable="false" unique="true" />
+	        </column>
+	        <column name="NAME" type="VARCHAR2(16)" remarks="Internal name">
+	        	<constraints nullable="false" unique="true" />
+	        </column>
+	        <column name="CREATE_DATE" type="DATE" remarks="Create date">
+				<constraints nullable="false" />
+			</column>
+			<column name="DELETE_DATE" type="DATE" remarks="Delete date" />
+	    </createTable>
+		<rollback>
+			<dropTable tableName="METEO_SERVICE" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="meteo.service.table.sequence" author="Alekseev Vitaly">
+		<createSequence sequenceName="SQ_METEO_SERVICE" incrementBy="1" startValue="1" />
+		<rollback>
+			<dropSequence sequenceName="SQ_METEO_SERVICE" />
+		</rollback>
+	</changeSet>
+	
+</databaseChangeLog>

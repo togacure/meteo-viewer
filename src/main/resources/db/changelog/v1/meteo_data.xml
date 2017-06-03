@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd"
+	logicalFilePath="db/changelog/meteo_service.xml">
+                      
+	<changeSet id="meteo.data.table" author="Alekseev Vitaly">
+		<createTable remarks="Store meteo data"
+	            schemaName="public"
+	            tableName="METEO_DATA">
+	        <column name="ID" type="NUMBER" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="SERVICE_ID" type="NUMBER" remarks="Meteo service">
+				<constraints nullable="false" />
+			</column>
+			<column name="LATITUDE" type="FLOAT" remarks="Latitude geographic value">
+	        	<constraints nullable="false" unique="true" />
+	        </column>
+	        <column name="LONGITUDE" type="FLOAT" remarks="Longitude geographic value">
+	        	<constraints nullable="false" unique="true" />
+	        </column>
+	        <column name="TEMPERATURE" type="VARCHAR(256)" remarks="Temperature">
+	        	<constraints nullable="false" unique="true" />
+	        </column>
+	        <column name="HUMIDITY" type="VARCHAR(256)" remarks="Humidity value">
+	        	<constraints nullable="false" unique="true" />
+	        </column>
+	        <column name="PRECIPITATION" type="VARCHAR(256)" remarks="Precipitation value">
+	        	<constraints nullable="false" unique="true" />
+	        </column>
+	        <column name="FETCH_TIMESTAMP" type="TIMESTAMP" remarks="Fetch timestamp">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<rollback>
+			<dropTable tableName="METEO_DATA" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="meteo.data.table.sequence" author="Alekseev Vitaly">
+		<createSequence sequenceName="SQ_METEO_DATA" incrementBy="1" startValue="1" />
+		<rollback>
+			<dropSequence sequenceName="SQ_METEO_DATA" />
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="meteo.data.table.fk.service" author="Alekseev Vitaly">
+		<addForeignKeyConstraint baseTableName="METEO_DATA" baseColumnNames="SERVICE_ID"
+			referencedTableName="METEO_SERVICE" referencedColumnNames="ID" constraintName="FK_METEO_DATA_SERVICE" />
+		<rollback>
+			<dropForeignKeyConstraint baseTableName="METEO_DATA" constraintName="FK_METEO_DATA_SERVICE" />
+		</rollback>
+	</changeSet>
+	
+</databaseChangeLog>
