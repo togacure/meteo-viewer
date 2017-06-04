@@ -8,5 +8,15 @@
     "name": "custom.meteodata.valid.period",
     "type": "java.lang.Integer",
     "description": "Meteodata valid period per mitutes"
+  },
+  {
+    "name": "custom.owmAPPID",
+    "type": "java.lang.String",
+    "description": "The APP ID provided by OpenWeatherMap - http://openweathermap.org/appid"
+  },
+  {
+    "name": "custom.meteodata.geo.radius",
+    "type": "java.lang.Float",
+    "description": "Radius of the circle at latitude/longitude center (in kilometres)"
   }
 ]}

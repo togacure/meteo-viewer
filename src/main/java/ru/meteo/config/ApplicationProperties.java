@@ -11,6 +11,10 @@ import lombok.Setter;
 public class ApplicationProperties {
 	
 	@Getter @Setter private String jeoqueryUsername;
+	
+	@Getter @Setter private String owmAPPID;
 
 	@Getter @Setter private Integer meteodataValidPeriod = 5;
+	
+	@Getter @Setter private Float meteodataGeoRadius = 15.0f;
 }
