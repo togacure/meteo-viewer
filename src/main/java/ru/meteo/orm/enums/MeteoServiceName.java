@@ -15,9 +15,9 @@ public enum MeteoServiceName {
 	public IMeteoService getService() {
 		switch(this) {
 		case OWM:
-			return AppContextHolder.getApplicationContext().getBean(OwmMeteoService.class);
+			return AppContextHolder.<OwmMeteoService> autowire(OwmMeteoService.class);
 		case MET:
-			return AppContextHolder.getApplicationContext().getBean(MetMeteoService.class);
+			return AppContextHolder.<MetMeteoService> autowire(MetMeteoService.class);
 		}
 		throw new RuntimeException("unknown meteo service name enum");
 	}
