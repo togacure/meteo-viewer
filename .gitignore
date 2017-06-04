@@ -28,3 +28,4 @@ nbdist/
 /*.project
 /mvnw
 /*.cmd
+/src/main/resources/application.properties

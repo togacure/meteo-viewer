@@ -18,5 +18,7 @@ liquibase.enabled=true
 
 spring.thymeleaf.prefix=classpath:/templates/
 
-custom.jeoqueryUsername=togacure
+custom.jeoqueryUsername= #web api token to access jeoquery service https://github.com/tompi/jeoquery#how-to-use 
+custom.owmAPPID= #web api token to access OpenWeatherMap service - http://openweathermap.org/appid
 custom.meteodata.valid.period=5
+custom.meteodata.geo.radius=15.0
