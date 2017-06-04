@@ -18,6 +18,7 @@
 	
 	<script th:inline="javascript">
 	/*<![CDATA[*/
+		$.ajaxSetup({cache : false});
 		jeoquery.defaultData.userName = /*[[${IndexModel.jeoqueryUsername}]]*/ "";
 		api = hybind("/api");    
 		
