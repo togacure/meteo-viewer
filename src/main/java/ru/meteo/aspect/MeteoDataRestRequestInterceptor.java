@@ -24,7 +24,7 @@ public class MeteoDataRestRequestInterceptor {
 	private ApplicationProperties properties;
 	
 	@SneakyThrows
-	@Around("execution(ru.meteo.orm.MeteoData ru.meteo.dao.MeteoDataRepository.findByService(..)) && "
+	@Around("execution(ru.meteo.orm.MeteoData ru.meteo.dao.MeteoDataRepository.findByServiceNameIsAndLatitudeIsAndLongitudeIs(..)) && "
 			+ "args(service, latitude, longitude)")
 	public MeteoData findByServiceInterceptor(ProceedingJoinPoint point, 
 												MeteoServiceName service, 
