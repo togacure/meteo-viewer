@@ -8,7 +8,7 @@ public class HumidityFormatter implements IFormatter<Float> {
 	
 	@Override
 	public String formatAsText(Float input) {
-		return String.format("%s%", format.format(input));
+		return format.format(input) + "%";
 	}
 
 }

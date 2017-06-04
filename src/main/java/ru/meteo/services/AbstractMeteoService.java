@@ -35,4 +35,7 @@ public abstract class AbstractMeteoService implements IMeteoService {
 		meteoDataRepository.save(data);
 	}
 
+	protected static final float fahrenheitToCelsius(float c) {
+		return ((c - 32) * 5) / 9;
+	}
 }

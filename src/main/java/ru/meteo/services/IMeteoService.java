@@ -19,15 +19,13 @@ public interface IMeteoService {
 			return null;
 		}
 		val result = new MeteoData();
-		persist(name, result, info);
+		result.setLatitude(latitude);
+		result.setLongitude(longitude);
+		result.setTemperature(info.getTemperature());
+		result.setHumidity(info.getHumidity());
+		result.setPrecipitation(info.getPrecipitation());
+		result.setFetchTimestamp(new Timestamp(new Date().getTime()));
+		persist(name, result);
 		return result;
-	}
-
-	default void persist(MeteoServiceName name, MeteoData data, MeteoDataModel info) {
-		data.setTemperature(info.getTemperature());
-		data.setHumidity(info.getHumidity());
-		data.setPrecipitation(info.getPrecipitation());
-		data.setFetchTimestamp(new Timestamp(new Date().getTime()));
-		persist(name, data);
 	}
 }
