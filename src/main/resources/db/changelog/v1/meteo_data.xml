@@ -16,19 +16,19 @@
 				<constraints nullable="false" />
 			</column>
 			<column name="LATITUDE" type="FLOAT" remarks="Latitude geographic value">
-	        	<constraints nullable="false" unique="true" />
+	        	<constraints nullable="false" />
 	        </column>
 	        <column name="LONGITUDE" type="FLOAT" remarks="Longitude geographic value">
-	        	<constraints nullable="false" unique="true" />
+	        	<constraints nullable="false" />
 	        </column>
 	        <column name="TEMPERATURE" type="VARCHAR(256)" remarks="Temperature">
-	        	<constraints nullable="false" unique="true" />
+	        	<constraints nullable="false" />
 	        </column>
 	        <column name="HUMIDITY" type="VARCHAR(256)" remarks="Humidity value">
-	        	<constraints nullable="false" unique="true" />
+	        	<constraints nullable="false" />
 	        </column>
 	        <column name="PRECIPITATION" type="VARCHAR(256)" remarks="Precipitation value">
-	        	<constraints nullable="false" unique="true" />
+	        	<constraints nullable="false" />
 	        </column>
 	        <column name="FETCH_TIMESTAMP" type="TIMESTAMP" remarks="Fetch timestamp">
 				<constraints nullable="false" />
