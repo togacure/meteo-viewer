@@ -10,7 +10,7 @@ ko.components.register("selectgeo", {
 
 ko.components.register("selectdict", {
 	template: "<div>" +
-				"	<label class='componentLabel' for='selectdict'><span>select meteo service:</span></label>" +
+				"	<label class='componentLabel' for='selectdict'><span>select meteo service: </span></label>" +
 				"	<select class='selectdict' data-bind='selectdict: {value: value, dict: dict, columns: columns, label: label}'></select>" +
 				"</div>",
 	viewModel: function (params) {
@@ -28,11 +28,13 @@ ko.components.register("meteoview", {
 				"	<div class='selectServiceContainer'" +
 				"		data-bind='component: {name: \"selectdict\", params: {value: selectedServiceValue, dict: dictSelectService, columns: meteoServiceColumns, label: meteoServiceDisplayColumn}}'>" +
 				"	</div>" +
-				"	<div class'meteoservice' data-bind='meteoservice: {value: resultValue, service: selectedServiceValue, geo: selectedGeoValue}'>" +
+				"	<div class='meteoservice' data-bind='meteoservice: {value: resultValue, service: selectedServiceValue, geo: selectedGeoValue, visible: !errorFetch(), refresh: refreshSubscriber}'>" +
+				"		<span class='ui-icon ui-icon-arrowrefresh-1-e' title='refresh' data-bind='click: refresh'></span><br/>" +
 				"		<div class='temperature'><label class='componentLabel' for='temperature'><span>temperature:</span></label><span data-bind='text: temperature'></span></div>" +
 				"		<div class='humidity'><label class='componentLabel' for='humidity'><span>humidity:</span></label><span data-bind='text: humidity'></span></div>" +
 				"		<div class='precipitation'><label class='componentLabel' for='precipitation'><span>precipitation:</span></label><span data-bind='text: precipitation'></span></div>" +
 				"	</div>" +
+				"	<span class='errorFetch' data-bind='visible: errorFetch()'>service not available</span>" +
 				"</div>",
 	viewModel: function (params) {
 		var self = this;
@@ -59,5 +61,15 @@ ko.components.register("meteoview", {
 		self.precipitation = ko.pureComputed(function() {
 			return self.resultValue().precipitation;
 		}, self);
+		self.errorFetch = function() {
+			function isError(o) {
+				return !o || o == 'error';
+			}
+			return !self.resultValue() || isError(self.resultValue().temperature) || isError(self.resultValue().humidity) || isError(self.resultValue().precipitation);
+		};
+		self.refreshSubscriber = ko.observable(true);
+		self.refresh = function() {
+			self.refreshSubscriber(!self.refreshSubscriber());
+		};
 	}
 });

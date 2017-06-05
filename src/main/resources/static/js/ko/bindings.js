@@ -76,6 +76,10 @@ ko.bindingHandlers.meteoservice = {
 		var div = $(element);
 		var params = valueAccessor();
 		function loadMeteodata(service, latitude, longitude) {
+			if (!service || !latitude || !longitude) {
+				return;
+			}
+			div.addClass("loading");
 			var data = [];
 			api.$bind("meteo-data/search/findByServiceNameIsAndLatitudeIsAndLongitudeIs", data);
 			data.$load({service: service, latitude: latitude, longitude: longitude}).then(function() {
@@ -83,9 +87,12 @@ ko.bindingHandlers.meteoservice = {
 				if (!data || data.length < 1) {
 					console.error("fault load meteo data");
 					params.value({temperature : "error", humidity : "error", precipitation: "error"});
+					div.removeClass("loading");
 					return data;
 				}
 				params.value({temperature : data[0].temperature, humidity : data[0].humidity, precipitation: data[0].precipitation});
+				div.removeClass("loading");
+				return data;
 			});
 		}
 		params.geo.subscribe(function () {
@@ -97,5 +104,9 @@ ko.bindingHandlers.meteoservice = {
 		if (params.service() && params.service()["name"] && params.geo && params.geo()["latitude"] && params.geo()["longitude"]) {
 			loadMeteodata(params.service()["name"], params.geo()["latitude"], params.geo()["longitude"]);
 		}
+		params.refresh.subscribe(function() {
+			console.debug("refresh: ");
+			loadMeteodata(params.service()["name"], params.geo()["latitude"], params.geo()["longitude"]);
+		});
 	}
 };
