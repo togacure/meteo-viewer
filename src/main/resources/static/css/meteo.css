@@ -9,6 +9,7 @@ div.meteoview {
 input.selectgeo {
 	border-radius: 4px;
 	width: 500px;
+	height: 25px;
 }
 
 div.meteoservice, div.selectServiceContainer {
@@ -35,4 +36,10 @@ span.errorFetch {
 	background: url(/img/spinner.gif);
 	background-repeat: no-repeat;
 	background-position: center;
+}
+
+.sm-loading {
+	background: url(/img/sm-spinner.gif);
+	background-repeat: no-repeat;
+	background-position: right;
 }

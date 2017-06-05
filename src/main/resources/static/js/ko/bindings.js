@@ -27,6 +27,12 @@ ko.bindingHandlers.selectgeo = {
 				params.value({countryCode: "", country: "", city: ""});
 			}
 		});
+		input.on("autocompletesearch", function(event, ui) {
+			input.addClass("sm-loading");
+		});
+		input.on("autocompleteresponse", function(event, ui) {
+			input.removeClass("sm-loading");
+		});
 		if (params.value() && params.value().city && params.value().country) {
 			input.val(params.value().city + ", " + params.value().country);
 		}
