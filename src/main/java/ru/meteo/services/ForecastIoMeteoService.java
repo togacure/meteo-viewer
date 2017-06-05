@@ -36,8 +36,8 @@ public class ForecastIoMeteoService extends AbstractMeteoService {
 		val currently = new FIOCurrently(fio);
 		val result = new MeteoDataModel(
 				new TemperatureFormatter().formatAsText(currently.get().temperature().floatValue()),
-				new HumidityFormatter().formatAsText(currently.get().humidity().floatValue()),
-				currently.get().precipIntensity() > 0 ? new PrecipitationFormatter().formatAsText(currently.get().precipIntensity().floatValue()) : "has no rain");
+				new HumidityFormatter().formatAsText(currently.get().humidity().floatValue() * 100),
+				new PrecipitationFormatter().formatAsText(currently.get().precipIntensity().floatValue()));
 		log.info("fetchNewInfo: result: {}", result);
 		return result;
 	}
