@@ -24,6 +24,10 @@ public class OwmMeteoService extends AbstractMeteoService {
 	
 	@Override
 	public MeteoDataModel fetchNewInfo(Double latitude, Double longitude) {
+		log.info("fetchNewInfo: latitude: {} longitude: {}", latitude, longitude);
+		if (java.util.Objects.isNull(latitude) || java.util.Objects.isNull(longitude)) {
+			return null;
+		}
 		val client = new OpenWeatherMap(properties.getOwmAPPID());
 		try {
 			val currentWeather = client.currentWeatherByCoordinates(latitude.floatValue(), longitude.floatValue());

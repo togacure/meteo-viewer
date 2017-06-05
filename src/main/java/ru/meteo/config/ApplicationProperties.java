@@ -16,5 +16,5 @@ public class ApplicationProperties {
 
 	@Getter @Setter private Integer meteodataValidPeriod = 5;
 	
-	@Getter @Setter private Float meteodataGeoRadius = 15.0f;
+	@Getter @Setter private String forecastIoSecretKey;
 }

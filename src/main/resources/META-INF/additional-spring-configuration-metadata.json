@@ -5,7 +5,7 @@
     "description": "https://github.com/tompi/jeoquery#how-to-use - jeoquery.defaultData.userName value"
   },
   {
-    "name": "custom.meteodata.valid.period",
+    "name": "custom.meteodataValidPeriod",
     "type": "java.lang.Integer",
     "description": "Meteodata valid period per mitutes"
   },
@@ -15,8 +15,8 @@
     "description": "The APP ID provided by OpenWeatherMap - http://openweathermap.org/appid"
   },
   {
-    "name": "custom.meteodata.geo.radius",
-    "type": "java.lang.Float",
-    "description": "Radius of the circle at latitude/longitude center (in kilometres)"
+    "name": "custom.forecastIoSecretKey",
+    "type": "java.lang.String",
+    "description": "Forecast IO (Dark Sky API) secret key - https://darksky.net/dev/account"
   }
 ]}
