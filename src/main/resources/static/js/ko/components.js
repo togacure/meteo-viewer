@@ -28,13 +28,15 @@ ko.components.register("meteoview", {
 				"	<div class='selectServiceContainer'" +
 				"		data-bind='component: {name: \"selectdict\", params: {value: selectedServiceValue, dict: dictSelectService, columns: meteoServiceColumns, label: meteoServiceDisplayColumn}}'>" +
 				"	</div>" +
-				"	<div class='meteoservice' data-bind='meteoservice: {value: resultValue, service: selectedServiceValue, geo: selectedGeoValue, visible: !errorFetch(), refresh: refreshSubscriber}'>" +
+				"	<div class='meteoservice' data-bind='meteoservice: {value: resultValue, service: selectedServiceValue, geo: selectedGeoValue, refresh: refreshSubscriber}'>" +
+				"		<div data-bind='visible: !errorFetch()'>" +
 				"		<span class='ui-icon ui-icon-arrowrefresh-1-e' title='refresh' data-bind='click: refresh'></span><br/>" +
 				"		<div class='temperature'><label class='componentLabel' for='temperature'><span>temperature:</span></label><span data-bind='text: temperature'></span></div>" +
 				"		<div class='humidity'><label class='componentLabel' for='humidity'><span>humidity:</span></label><span data-bind='text: humidity'></span></div>" +
 				"		<div class='precipitation'><label class='componentLabel' for='precipitation'><span>precipitation:</span></label><span data-bind='text: precipitation'></span></div>" +
+				"		</div>" +
+				"		<span class='errorFetch' data-bind='visible: errorFetch()'>service not available</span>" +
 				"	</div>" +
-				"	<span class='errorFetch' data-bind='visible: errorFetch()'>service not available</span>" +
 				"</div>",
 	viewModel: function (params) {
 		var self = this;
