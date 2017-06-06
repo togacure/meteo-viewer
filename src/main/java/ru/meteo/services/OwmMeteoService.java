@@ -12,13 +12,15 @@ import net.aksingh.owmjapis.OpenWeatherMap;
 import ru.meteo.config.ApplicationProperties;
 import ru.meteo.dto.MeteoDataModel;
 import ru.meteo.orm.enums.MeteoDataStatus;
+import ru.meteo.services.util.Coordinates;
 import ru.meteo.services.util.HumidityFormatter;
 import ru.meteo.services.util.PrecipitationFormatter;
 import ru.meteo.services.util.TemperatureFormatter;
+import ru.meteo.util.SynchronizedExecutor;
 
 @Slf4j
 @Component
-public class OwmMeteoService implements IMeteoService {
+public class OwmMeteoService extends SynchronizedExecutor<Coordinates, MeteoDataModel> implements IMeteoService {
 	
 	@Autowired
 	private ApplicationProperties properties;
@@ -33,20 +35,27 @@ public class OwmMeteoService implements IMeteoService {
 	}
 
 	private MeteoDataModel fetchAndFill(MeteoDataModel info, Double latitude, Double longitude) {
-		val client = new OpenWeatherMap(properties.getOwmAPPID());
-		try {
-			val currentWeather = client.currentWeatherByCoordinates(latitude.floatValue(), longitude.floatValue());
-			final Float rain = currentWeather.hasRainInstance() ? currentWeather.getRainInstance().getRain() : Float.NaN;
-			info.setHumidity(new HumidityFormatter().formatAsText(currentWeather.getMainInstance().getHumidity()));
-			info.setPrecipitation(new PrecipitationFormatter().formatAsText(rain));
-			info.setTemperature(new TemperatureFormatter().formatAsText(fahrenheitToCelsius(currentWeather.getMainInstance().getTemperature())));
-			info.setStatus(MeteoDataStatus.SUCCESS);
+		return executeOnce(new Coordinates(latitude, longitude), (o) -> {
+			val client = new OpenWeatherMap(properties.getOwmAPPID());
+			try {
+				val currentWeather = client.currentWeatherByCoordinates(latitude.floatValue(), longitude.floatValue());
+				final Float rain = currentWeather.hasRainInstance() ? currentWeather.getRainInstance().getRain() : Float.NaN;
+				info.setHumidity(new HumidityFormatter().formatAsText(currentWeather.getMainInstance().getHumidity()));
+				info.setPrecipitation(new PrecipitationFormatter().formatAsText(rain));
+				info.setTemperature(new TemperatureFormatter().formatAsText(fahrenheitToCelsius(currentWeather.getMainInstance().getTemperature())));
+				info.setStatus(MeteoDataStatus.SUCCESS);
+				log.info("fetchAndFill: info: {}", info);
+			} catch (JSONException e) {
+				log.error("fetchAndFill: latitude: {} longitude: {}", latitude, longitude);
+				log.error("fetchAndFill: ", e);
+				info.setStatus(MeteoDataStatus.ERROR);
+			}
+			return info;
+		}, (o) -> {
+			info.setStatus(MeteoDataStatus.PENDING);
 			log.info("fetchAndFill: info: {}", info);
-		} catch (JSONException e) {
-			log.error("fetchAndFill: latitude: {} longitude: {}", latitude, longitude);
-			log.error("fetchAndFill: ", e);
-			info.setStatus(MeteoDataStatus.ERROR);
-		}
-		return info;
+			return info;
+		});
+		
 	}
 }

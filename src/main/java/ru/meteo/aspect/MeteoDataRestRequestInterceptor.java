@@ -52,7 +52,7 @@ public class MeteoDataRestRequestInterceptor {
 												Double latitude, 
 												Double longitude) {
 		log.info("findByServiceInterceptor: original: {} service: {} latitude: {} longitude: {}", point.toShortString(), service, latitude, longitude);
-		List<MeteoData> result = Lists.newArrayList(
+		final List<MeteoData> result = Lists.newArrayList(
 				meteoDataRepository.findActuals(service, latitude, longitude, properties.getMeteodataValidPeriod()));
 		result.forEach((md) -> {
 			md.setStatus(MeteoDataStatus.SUCCESS);

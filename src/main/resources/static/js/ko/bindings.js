@@ -97,6 +97,29 @@ ko.bindingHandlers.meteoservice = {
 					div.removeClass("loading");
 					return data;
 				}
+				if (data[0].status == 'PENDING') {
+					var intId = setInterval(function() {
+						while(data.pop()) {}
+						data.$load({service: service, latitude: latitude, longitude: longitude}).then(function() {
+							console.info("meteoservice.init.interval: data: %s", data);
+							if (!data || data.length < 1 || data[0].status == 'ERROR') {
+								console.error("fault load meteo data");
+								params.value({temperature : "error", humidity : "error", precipitation: "error"});
+								div.removeClass("loading");
+								clearInterval(intId);
+								return data;
+							}
+							if (data[0].status == 'PENDING') {
+								return data;
+							}
+							params.value({temperature : data[0].temperature, humidity : data[0].humidity, precipitation: data[0].precipitation});
+							div.removeClass("loading");
+							clearInterval(intId);
+							return data;
+						});
+					}, 5000);
+					return data;
+				}
 				params.value({temperature : data[0].temperature, humidity : data[0].humidity, precipitation: data[0].precipitation});
 				div.removeClass("loading");
 				return data;
