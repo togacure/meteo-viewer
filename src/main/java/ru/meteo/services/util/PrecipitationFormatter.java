@@ -12,7 +12,7 @@ public class PrecipitationFormatter implements IFormatter<Float> {
 	
 	@Override
 	public String formatAsText(Float input) {
-		return Objects.equal(input, Float.NaN) || input < 0 ? MISSING_PRECITITATIONS_MESSAGE : String.format("intencity is %s mm/h", format.format(input));
+		return Objects.equal(input, Float.NaN) || input <= 0 ? MISSING_PRECITITATIONS_MESSAGE : String.format("intencity is %s mm/h", format.format(input));
 	}
 
 }
