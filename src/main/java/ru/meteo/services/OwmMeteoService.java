@@ -67,6 +67,9 @@ public class OwmMeteoService extends SynchronizedExecutor<Coordinates, MeteoData
 		
 	}
 	
+	/**
+	 * FIXME update vendor to 2.5.0.5 on central maven, see {@link https://github.com/akapribot/OWM-JAPIs}
+	 */
 	private Float fixupParseRain(String rawResponse) throws JSONException {
 		return Optional.ofNullable(new JSONObject(rawResponse).getJSONObject("rain")).map((rain) -> {
 			return rain.optDouble("3h", Double.NaN);
