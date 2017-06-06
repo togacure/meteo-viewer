@@ -3,8 +3,11 @@ package ru.meteo.services;
 import java.util.Optional;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.google.common.base.Objects;
 
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +42,12 @@ public class OwmMeteoService extends SynchronizedExecutor<Coordinates, MeteoData
 			val client = new OpenWeatherMap(properties.getOwmAPPID());
 			try {
 				val currentWeather = client.currentWeatherByCoordinates(latitude.floatValue(), longitude.floatValue());
-				final Float rain = currentWeather.hasRainInstance() ? currentWeather.getRainInstance().getRain() : Float.NaN;
+				if (!currentWeather.hasRawResponse()) {
+					info.setStatus(MeteoDataStatus.ERROR);
+					return info;
+				}
+				Float rain = Optional.ofNullable(currentWeather.getRainInstance()).map((r) -> {return r.getRain();}).orElse(Float.NaN);
+				rain = currentWeather.hasRainInstance() && Objects.equal(rain, Float.NaN) ? fixupParseRain(currentWeather.getRawResponse()) : rain;
 				info.setHumidity(new HumidityFormatter().formatAsText(currentWeather.getMainInstance().getHumidity()));
 				info.setPrecipitation(new PrecipitationFormatter().formatAsText(rain));
 				info.setTemperature(new TemperatureFormatter().formatAsText(fahrenheitToCelsius(currentWeather.getMainInstance().getTemperature())));
@@ -57,5 +65,11 @@ public class OwmMeteoService extends SynchronizedExecutor<Coordinates, MeteoData
 			return info;
 		});
 		
+	}
+	
+	private Float fixupParseRain(String rawResponse) throws JSONException {
+		return Optional.ofNullable(new JSONObject(rawResponse).getJSONObject("rain")).map((rain) -> {
+			return rain.optDouble("3h", Double.NaN);
+		}).orElse(Double.NaN).floatValue();
 	}
 }
