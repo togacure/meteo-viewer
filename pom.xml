@@ -86,9 +86,9 @@
 		</dependency>
 		
 		<dependency>
-		    <groupId>net.aksingh</groupId>
-		    <artifactId>owm-japis</artifactId>
-		    <version>2.5.0.3</version>
+			<groupId>net.aksingh</groupId>
+			<artifactId>owm-japis</artifactId>
+			<version>2.5.0.3</version>
 		</dependency>
 		
 		<dependency>
