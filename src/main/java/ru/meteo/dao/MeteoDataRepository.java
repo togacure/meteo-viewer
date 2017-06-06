@@ -16,6 +16,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
+import lombok.val;
 import ru.meteo.orm.MeteoData;
 import ru.meteo.orm.MeteoData_;
 import ru.meteo.orm.MeteoService;
@@ -34,11 +35,12 @@ public interface MeteoDataRepository  extends CrudRepository<MeteoData, Long>, J
 		return findAll(new Specification<MeteoData> (){
 						@Override
 						public Predicate toPredicate(Root<MeteoData> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-							Calendar from = Calendar.getInstance();
-							Calendar to = Calendar.getInstance();
-							to.setTime(new Date());
-							from.setTime(new Date());
-							from.set(Calendar.MINUTE, to.get(Calendar.MINUTE) - expire);
+							val current = new Date();
+							val from = Calendar.getInstance();
+							from.setTime(current);
+							from.set(Calendar.MINUTE, from.get(Calendar.MINUTE) - expire);
+							val to = Calendar.getInstance();
+							to.setTime(current);
 							return cb.and(
 										cb.equal(root.<MeteoService> get(MeteoData_.service).<MeteoServiceName> get(MeteoService_.name), service),
 										cb.equal(root.<Double> get(MeteoData_.latitude), latitude),

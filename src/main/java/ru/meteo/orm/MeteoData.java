@@ -12,11 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.data.rest.core.annotation.RestResource;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.meteo.orm.enums.MeteoDataStatus;
 
 @Entity
 @Table(name = "METEO_DATA")
@@ -51,4 +53,6 @@ public class MeteoData {
 	@Column(name = "FETCH_TIMESTAMP")
 	@Getter @Setter private Timestamp fetchTimestamp;
 	
+	@Transient
+	@Getter @Setter private MeteoDataStatus status = MeteoDataStatus.UNKNOWN;
 }

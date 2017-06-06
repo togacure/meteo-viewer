@@ -1,6 +1,7 @@
 package ru.meteo.services;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,13 +13,14 @@ import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 import ru.meteo.config.ApplicationProperties;
 import ru.meteo.dto.MeteoDataModel;
+import ru.meteo.orm.enums.MeteoDataStatus;
 import ru.meteo.services.util.HumidityFormatter;
 import ru.meteo.services.util.PrecipitationFormatter;
 import ru.meteo.services.util.TemperatureFormatter;
 
 @Slf4j
 @Component
-public class ForecastIoMeteoService extends AbstractMeteoService {
+public class ForecastIoMeteoService implements IMeteoService {
 
 	@Autowired
 	private ApplicationProperties properties;
@@ -26,20 +28,26 @@ public class ForecastIoMeteoService extends AbstractMeteoService {
 	@Override
 	public MeteoDataModel fetchNewInfo(Double latitude, Double longitude) {
 		log.info("fetchNewInfo: latitude: {} longitude: {}", latitude, longitude);
-		if (Objects.isNull(latitude) || Objects.isNull(longitude)) {
-			return null;
-		}
+		return Optional.ofNullable(IMeteoService.super.fetchNewInfo(latitude, longitude)).
+				map((result) -> {
+					return fetchAndFill(result, latitude, longitude);
+				}).get();
+	}
+	
+	private MeteoDataModel fetchAndFill(MeteoDataModel info, Double latitude, Double longitude) {
+		log.info("fetchAndFill: latitude: {} longitude: {}", latitude, longitude);
 		val fio = new ForecastIO(properties.getForecastIoSecretKey()); 
 		if (!fio.getForecast(latitude.toString(), longitude.toString())) {
-			return null;
+			info.setStatus(MeteoDataStatus.ERROR);
+			return info;
 		}
 		val currently = new FIOCurrently(fio);
-		val result = new MeteoDataModel(
-				new TemperatureFormatter().formatAsText(currently.get().temperature().floatValue()),
-				new HumidityFormatter().formatAsText(currently.get().humidity().floatValue() * 100),
-				new PrecipitationFormatter().formatAsText(currently.get().precipIntensity().floatValue()));
-		log.info("fetchNewInfo: result: {}", result);
-		return result;
+		info.setHumidity(new HumidityFormatter().formatAsText(currently.get().humidity().floatValue() * 100));
+		info.setPrecipitation(new PrecipitationFormatter().formatAsText(currently.get().precipIntensity().floatValue()));
+		info.setTemperature(new TemperatureFormatter().formatAsText(currently.get().temperature().floatValue()));
+		info.setStatus(MeteoDataStatus.SUCCESS);
+		log.info("fetchAndFill: info: {}", info);
+		return info;
 	}
 
 }

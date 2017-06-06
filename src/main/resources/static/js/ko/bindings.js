@@ -83,6 +83,7 @@ ko.bindingHandlers.meteoservice = {
 		var params = valueAccessor();
 		function loadMeteodata(service, latitude, longitude) {
 			if (!service || !latitude || !longitude) {
+				console.error("loadMeteodata: service: %s latitude: %s longitude: %s", service, latitude, longitude);
 				return;
 			}
 			div.addClass("loading");
@@ -90,7 +91,7 @@ ko.bindingHandlers.meteoservice = {
 			api.$bind("meteo-data/search/findByServiceNameIsAndLatitudeIsAndLongitudeIs", data);
 			data.$load({service: service, latitude: latitude, longitude: longitude}).then(function() {
 				console.info("meteoservice.init: data: %s", data);
-				if (!data || data.length < 1) {
+				if (!data || data.length < 1 || data[0].status == 'ERROR') {
 					console.error("fault load meteo data");
 					params.value({temperature : "error", humidity : "error", precipitation: "error"});
 					div.removeClass("loading");
