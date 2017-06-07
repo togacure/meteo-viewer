@@ -17,7 +17,7 @@ public class SynchronizedExecutor<L, R> {
 	
 	protected R executeOnce(L lockObject, Function<Void, ? extends R> success, Function<Void, ? extends R> decline) {
 		try {
-			if (!esqure(lockObject)) {
+			if (!acqure(lockObject)) {
 				return Optional.ofNullable(success).map((s) -> {return s.apply(null);}).orElse(null);
 			} else {
 				return Optional.ofNullable(decline).map((s) -> {return s.apply(null);}).orElse(null);
@@ -27,7 +27,7 @@ public class SynchronizedExecutor<L, R> {
 		}
 	}
 	
-	private final boolean esqure(L lockObject) {
+	private final boolean acqure(L lockObject) {
 		lock.lock();
 		try {
 			if (objects.contains(lockObject)) {
